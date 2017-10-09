@@ -1,7 +1,7 @@
 # log320_puzzle
 Log 320 Puzzle Labo 2
 
-#Dev Environment
+# Dev Environment
 gitHub -> https://github.com/liouf/log320_puzzle.git
 
 IDE -> intelliJ
