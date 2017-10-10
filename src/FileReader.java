@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -53,14 +52,17 @@ public class FileReader {
 
     /**
      * This method accepts a list of strings representing the lines in a text file.
+     * Adapted to use with the expected format for Lab 2.
      */
-    public ArrayList<String> fileLinesToStringArrayList(List<String> fileLines) {
-        ArrayList<String> arrayList = new ArrayList<>();
+    public String[][] fileLinesToCharacterTable(List<String> fileLines) {
+        String[][] characterTable = new String[7][7];
 
-        for (String word: fileLines) {
-            arrayList.add(word.replaceAll("\\s+", "")); //Inspired from https://stackoverflow.com/questions/15633228/how-to-remove-all-white-spaces-in-java
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 7; j++) {
+                characterTable[i][j] = Character.toString(fileLines.get(i).charAt(j));
+            }
         }
-        return arrayList;
+        return characterTable;
     }
 
 }
