@@ -18,6 +18,12 @@ public class Board {
     }
 
     /**
+     * Constructor that is given a possible move
+     */
+    public Board(Board board,Move initialMove) {
+        this.tiles = new String[7][7];
+    }    
+    /**
      * Displays current board layout
      *
      */
@@ -57,7 +63,7 @@ public class Board {
         List<int[]> emptyTiles = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 7; j++) {
-                if (this.tiles[i][j] == "1") { //Is not filled
+                if (this.tiles[i][j] == "2") { //Is not filled
 
                     int[] position = new int[2];
                     position[0] = i;
@@ -94,8 +100,9 @@ public class Board {
     }
 
     public void makeMove(Move move) {
-        this.tiles[move.fromPositionX][move.fromPositionY] = "1";
-        this.tiles[move.toPositionX][move.toPositionY] = "2";
+        this.tiles[move.getRow()][move.getCol()] = "1";
+        this.tiles[move.getDestinationRow()][move.getDestionationCol] = "2";
+        this.tiles[move.getSkippedRow()][move.getSkippedCol()]="2";
     }
 
     /**
@@ -103,20 +110,46 @@ public class Board {
      */
     class Move {
 
-        int fromPositionX;
-        int fromPositionY;
-        int toPositionX;
-        int toPositionY;
+        private int row;
+        private int col;
+        
+        //A move in -X goes left, +X goes right and null is not horizontal
+        private int xMove;
+        //A move in -Y goes down, +Y goes right and null is not vertical
+        private int yMove;
 
         /**
          * Constructor
          */
-        public Move(int[] fromPosition, int[] toPosition) {
-            fromPositionX = fromPosition[0];
-            fromPositionY = fromPosition[1];
-
-            toPositionX = toPosition[0];
-            toPositionY = toPosition[1];
+        public Move(int row, int col, int XMove, int yMove) {
+            this.row = row;
+            this.col = col;
+            this.xMove = xMove;
+            this.yMove = yMove;
+        }
+        
+        public int getRow() {
+        	return row;
+        }
+        
+        public int getCol() {
+        	return col;
+        }
+        
+        public int getSkippedRow() {
+        	return row+xMove;
+        }
+        
+        public int getSkippedCol() {
+        	return col+yMove
+        }
+        
+        public int getDestinationRow() {
+        	return row+(2*xMove);
+        }
+        
+        public int getDestionationCol() {
+        	return col+(2*yMove);
         }
     }
 
