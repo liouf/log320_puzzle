@@ -7,21 +7,21 @@ import java.util.List;
  */
 public class Board {
 
-    String[][] tiles;
+    private String[][] tiles;
+    private List<Move> possibleMoves;
+    private int nbOfPawns;
+    
+    private List<Move> moveHistory;
 
     /**
      * Constructor
+     *
      */
     public Board() {
         this.tiles = new String[7][7];
     }
-
-    /**
-     * Constructor that is given a possible move
-     */
-    public Board(Board board,Move initialMove) {
-        this.tiles = new String[7][7];
-    }    
+    
+    
     /**
      * Displays current board layout
      */
@@ -47,8 +47,31 @@ public class Board {
         return false;
     }
 
-    public void solve(Board board) {
-
+    public List<Move> solve() {
+    	
+    	//If the board is complete, we return true for a win
+    	if(nbOfPawns==1) {
+    		ArrayList<Move> path = new  ArrayList<Move>();
+    		return path;
+    	}
+    	
+    	//We try every possible move
+    	for(Move executableMove : this.getMoves()) {
+    		this.makeMove(executableMove);
+    		this.displayBoard();
+    		
+    		List<Move> path = solve();
+    		
+    		if(path != null) {
+    			path.add(executableMove);
+    			return path;
+    		}
+    		
+    		this.undoMove(executableMove);
+    	}
+    	
+    	//if the board is a dead end, we return false and go up the branches again
+    	return null;
     }
 
     /**
@@ -57,11 +80,10 @@ public class Board {
      * @return
      */
     public List<int[]> getEmptyTiles() {
-
         List<int[]> emptyTiles = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 7; j++) {
-                if (this.tiles[i][j] == "2") { //Is not filled
+                if (this.tiles[i][j].equals("2")) { //Is not filled
 
                     int[] position = new int[2];
                     position[0] = i;
@@ -70,8 +92,12 @@ public class Board {
                 }
             }
         }
-
+        System.out.println("there are "+emptyTiles.size()+" empty tiles");
         return emptyTiles;
+    }
+    
+    public String[][] getTiles(){
+    	return this.tiles;
     }
 
     /**
@@ -81,14 +107,15 @@ public class Board {
      * @return getMoves : list of moves
      */
     public List<Move> getMoves() {
+
         List<Move> moveList = new ArrayList<Move>();
         for (int[] position : getEmptyTiles()) {
             if (checkUp(position)) {
-                Move move = new Move(position[0], position[1], 0, 1);
+                Move move = new Move(position[0], position[1], 0, -1);
                 moveList.add(move);
             }
             if (checkDown(position)) {
-                Move move = new Move(position[0], position[1], 0, -1);
+                Move move = new Move(position[0], position[1], 0, 1);
                 moveList.add(move);
             }
             if (checkRight(position)) {
@@ -100,98 +127,87 @@ public class Board {
                 moveList.add(move);
             }
         }
+    	System.out.println("there are "+moveList.size()+" possible moves.");
         return moveList;
     }
-
+    
     public boolean checkUp(int [] position) {
 
-        if(position[1] > 1 && this.tiles[position[0]][position[1] - 1] == "1" && this.tiles[position[0]][position[1] - 2] == "1") {
+        if(position[0] > 1 ) {
+        	if(this.tiles[position[0] - 1][position[1]].equals("1") && this.tiles[position[0]-2][position[1]].equals("1")) {
             return true;
+        	}
         }
         return false;
     }
 
     public boolean checkDown(int[] position) {
-        if(position[1] <= 5 && this.tiles[position[0]][position[1] + 1] == "1" && this.tiles[position[0]][position[1] + 2] == "1") {
+        if(position[0] < 5 ) {
+        	if(this.tiles[position[0] + 1][position[1]].equals("1") && this.tiles[position[0] + 2][position[1]].equals("1")) {        
             return true;
+        	}
         }
         return false;
     }
 
     public boolean checkRight(int[] position) {
-        if(position[0] <= 5 && this.tiles[position[0] + 1][position[1]] == "1" && this.tiles[position[0] + 2][position[1]] == "1") {
+        if(position[1] < 5) {
+        	if(this.tiles[position[0]][position[1] + 1].equals("1") && this.tiles[position[0]][position[1] + 2].equals("1")) {
             return true;
+        	}
         }
         return false;
     }
 
     public boolean checkLeft(int[] position) {
-        if(position[0] > 1 && this.tiles[position[0] - 1][position[1]] == "1" && this.tiles[position[0] - 2][position[1]] == "1") {
+        if(position[1] > 1 ) {
+        	if(this.tiles[position[0]][position[1] - 1].equals("1") && this.tiles[position[0]][position[1] - 2].equals("1")) {
             return true;
+        	}
         }
         return false;
     }
 
     /**
-     * Sets this board's layout
-     *
+     * Sets this board's initial layout
      * @param boardLayout
      */
-    public void setBoard(String[][] boardLayout) {
+    public void setInitialBoard(String[][] boardLayout) {
         System.arraycopy(boardLayout, 0, this.tiles, 0, boardLayout.length);
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 7; j++) {
+                nbOfPawns++;
+            }
+        }
     }
 
     public void makeMove(Move move) {
         this.tiles[move.getRow()][move.getCol()] = "1";
         this.tiles[move.getDestinationRow()][move.getDestinationCol()] = "2";
         this.tiles[move.getSkippedRow()][move.getSkippedCol()]="2";
+        nbOfPawns--;
+       // this.moveHistory.add(move);
+    }
+    
+    public void undoMove(Move move) {
+    	
+        this.tiles[move.getRow()][move.getCol()] = "2";
+        this.tiles[move.getDestinationRow()][move.getDestinationCol()] = "1";
+        this.tiles[move.getSkippedRow()][move.getSkippedCol()]="1";
+        nbOfPawns++;
+        //this.moveHistory.remove(move);
+    }
+    
+    public int getNbOfPawns() {
+    	return nbOfPawns;
     }
 
-    /**
-     * This class defines a move between two positions on this board.
-     */
-    class Move {
-
-        private int row;
-        private int col;
-        
-        //A move in -X goes left, +X goes right and null is not horizontal
-        private int xMove;
-        //A move in -Y goes down, +Y goes right and null is not vertical
-        private int yMove;
-
-        /**
-         * Constructor
-         */
-        public Move(int row, int col, int xMove, int yMove) {
-            this.row = row;
-            this.col = col;
-            this.xMove = xMove;
-            this.yMove = yMove;
-        }
-        
-        public int getRow() {
-        	return row;
-        }
-        
-        public int getCol() {
-        	return col;
-        }
-        
-        public int getSkippedRow() {
-        	return row+xMove;
-        }
-        
-        public int getSkippedCol() {
-        	return col+yMove;
-        }
-        
-        public int getDestinationRow() {
-        	return row+(2*xMove);
-        }
-        
-        public int getDestinationCol() {
-        	return col+(2*yMove);
-        }
+    public boolean isSolution() {
+    	if(this.getNbOfPawns()==1) {
+    		return true;
+    	}
+    	return false;
     }
+
+
 }
