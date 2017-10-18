@@ -143,7 +143,7 @@ public class Board {
 
     public void makeMove(Move move) {
         this.tiles[move.getRow()][move.getCol()] = "1";
-        this.tiles[move.getDestinationRow()][move.getDestionationCol()] = "2";
+        this.tiles[move.getDestinationRow()][move.getDestinationCol()] = "2";
         this.tiles[move.getSkippedRow()][move.getSkippedCol()]="2";
     }
 
@@ -163,7 +163,7 @@ public class Board {
         /**
          * Constructor
          */
-        public Move(int row, int col, int XMove, int yMove) {
+        public Move(int row, int col, int xMove, int yMove) {
             this.row = row;
             this.col = col;
             this.xMove = xMove;
@@ -190,7 +190,7 @@ public class Board {
         	return row+(2*xMove);
         }
         
-        public int getDestionationCol() {
+        public int getDestinationCol() {
         	return col+(2*yMove);
         }
     }
