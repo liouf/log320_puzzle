@@ -3,7 +3,7 @@ import java.util.List;
 
 /**
  * This class defines a game board of 7x7 spaces that can either be filled or not. Some spaces can be blank, aka not playable
- * while others will contain either 1 or 2 as information.
+ * while others will contain either 1 or 2 as a String, indicating filled or not filled with an imaginary piece.
  */
 public class Board {
 
@@ -11,6 +11,7 @@ public class Board {
 
     /**
      * Constructor
+     *
      */
     public Board() {
         this.tiles = new String[7][7];
@@ -18,6 +19,7 @@ public class Board {
 
     /**
      * Displays current board layout
+     *
      */
     public void displayBoard() {
         for (int i = 0; i < 7; i++) {
@@ -30,6 +32,7 @@ public class Board {
 
     /**
      * Runs through possible scenarios with current move set
+     *
      * @return
      */
     public boolean verifySolved() {
@@ -44,8 +47,25 @@ public class Board {
 
     }
 
-    public List<Tile> getEmptyTiles() {
-        List<Tile> emptyTiles = new ArrayList<Tile>();
+    /**
+     * Retrieves the empty tiles from the board in order to find the moves easier.
+     *
+     * @return
+     */
+    public List<int[]> getEmptyTiles() {
+
+        List<int[]> emptyTiles = new ArrayList<>();
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 7; j++) {
+                if (this.tiles[i][j] == "1") { //Is not filled
+
+                    int[] position = new int[2];
+                    position[0] = i;
+                    position[1] = j;
+                    emptyTiles.add(position);
+                }
+            }
+        }
         return emptyTiles;
     }
 
@@ -57,6 +77,9 @@ public class Board {
      */
     public List<Move> getMoves() {
         List<Move> moveList = new ArrayList<Move>();
+        for (int[] position : getEmptyTiles()) {
+
+        }
 
 
         return moveList;
