@@ -11,7 +11,6 @@ public class Board {
 
     /**
      * Constructor
-     *
      */
     public Board() {
         this.tiles = new String[7][7];
@@ -25,7 +24,6 @@ public class Board {
     }    
     /**
      * Displays current board layout
-     *
      */
     public void displayBoard() {
         for (int i = 0; i < 7; i++) {
@@ -84,15 +82,59 @@ public class Board {
     public List<Move> getMoves() {
         List<Move> moveList = new ArrayList<Move>();
         for (int[] position : getEmptyTiles()) {
-
+            if (checkUp(position)) {
+                Move move = new Move(position[0], position[1], 0, 1);
+                moveList.add(move);
+            }
+            if (checkDown(position)) {
+                Move move = new Move(position[0], position[1], 0, -1);
+                moveList.add(move);
+            }
+            if (checkRight(position)) {
+                Move move = new Move(position[0], position[1], 1, 0);
+                moveList.add(move);
+            }
+            if (checkLeft(position)) {
+                Move move = new Move(position[0], position[1], -1, 0);
+                moveList.add(move);
+            }
         }
-
-
         return moveList;
+    }
+
+    public boolean checkUp(int [] position) {
+
+        if(position[1] > 1 && this.tiles[position[0]][position[1] - 1] == "2" && this.tiles[position[0]][position[1] - 2] == "2") {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkDown(int[] position) {
+        if(position[1] <= 5 && this.tiles[position[0]][position[1] + 1] == "2" && this.tiles[position[0]][position[1] + 2] == "2") {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkRight(int[] position) {
+        if(position[0] <= 5 && this.tiles[position[0] + 1][position[1]] == "2" && this.tiles[position[0] + 2][position[1]] == "2") {
+            return true;
+        }
+        return false;
+    }
+
+
+    public boolean checkLeft(int[] position) {
+        if(position[0] > 1 && this.tiles[position[0] - 1][position[1]] == "2" && this.tiles[position[0] - 2][position[1]] == "2") {
+            return true;
+        }
+        return false;
     }
 
     /**
      * Sets this board's layout
+     *
      * @param boardLayout
      */
     public void setBoard(String[][] boardLayout) {
@@ -101,7 +143,7 @@ public class Board {
 
     public void makeMove(Move move) {
         this.tiles[move.getRow()][move.getCol()] = "1";
-        this.tiles[move.getDestinationRow()][move.getDestionationCol] = "2";
+        this.tiles[move.getDestinationRow()][move.getDestionationCol()] = "2";
         this.tiles[move.getSkippedRow()][move.getSkippedCol()]="2";
     }
 
@@ -141,7 +183,7 @@ public class Board {
         }
         
         public int getSkippedCol() {
-        	return col+yMove
+        	return col+yMove;
         }
         
         public int getDestinationRow() {
@@ -152,6 +194,7 @@ public class Board {
         	return col+(2*yMove);
         }
     }
+}
 
     /**
      * This class defines a tile on this board. Can be either filled or not.
@@ -160,38 +203,29 @@ public class Board {
      * array would be less complicated (don't have to worry about literal edge cases, if we go the route of
      * linked list with the tiles)
      */
+
+    /**
     class Tile {
 
         private boolean isFilled = true;
         private int x;
         private int y;
 
-        /**
-         * Constructor
-         */
+
         public Tile() {
 
         }
 
-        /**
-         * Removes fictional piece from fictional tile.
-         */
+
         public void remove() {
             isFilled = false;
         }
 
-        /**
-         * Adds fictional piece to fictional tile.
-         */
+
         public void fill() {
             isFilled = true;
         }
 
-        /**
-         * Sets the position for a tile
-         * @param x : row tile position
-         * @param y : column tile position
-         */
         public void setPosition(int x, int y) {
             this.x = x;
             this.y = y;
