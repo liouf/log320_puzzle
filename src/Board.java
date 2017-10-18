@@ -70,6 +70,7 @@ public class Board {
                 }
             }
         }
+
         return emptyTiles;
     }
 
@@ -104,29 +105,28 @@ public class Board {
 
     public boolean checkUp(int [] position) {
 
-        if(position[1] > 1 && this.tiles[position[0]][position[1] - 1] == "2" && this.tiles[position[0]][position[1] - 2] == "2") {
+        if(position[1] > 1 && this.tiles[position[0]][position[1] - 1] == "1" && this.tiles[position[0]][position[1] - 2] == "1") {
             return true;
         }
         return false;
     }
 
     public boolean checkDown(int[] position) {
-        if(position[1] <= 5 && this.tiles[position[0]][position[1] + 1] == "2" && this.tiles[position[0]][position[1] + 2] == "2") {
+        if(position[1] <= 5 && this.tiles[position[0]][position[1] + 1] == "1" && this.tiles[position[0]][position[1] + 2] == "1") {
             return true;
         }
         return false;
     }
 
     public boolean checkRight(int[] position) {
-        if(position[0] <= 5 && this.tiles[position[0] + 1][position[1]] == "2" && this.tiles[position[0] + 2][position[1]] == "2") {
+        if(position[0] <= 5 && this.tiles[position[0] + 1][position[1]] == "1" && this.tiles[position[0] + 2][position[1]] == "1") {
             return true;
         }
         return false;
     }
 
-
     public boolean checkLeft(int[] position) {
-        if(position[0] > 1 && this.tiles[position[0] - 1][position[1]] == "2" && this.tiles[position[0] - 2][position[1]] == "2") {
+        if(position[0] > 1 && this.tiles[position[0] - 1][position[1]] == "1" && this.tiles[position[0] - 2][position[1]] == "1") {
             return true;
         }
         return false;
