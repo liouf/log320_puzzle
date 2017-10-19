@@ -41,7 +41,7 @@
         	return row+(2*yMove);
         }
         
-        public int getDestinationCol() {
+        public int getDestionationCol() {
         	return col+(2*xMove);
         }
     }

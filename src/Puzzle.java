@@ -6,7 +6,7 @@ public class Puzzle {
     public static void main (String[] args) throws IOException {
 
         FileReader fr = new FileReader();
-        String[][] fileArray = fr.fileLinesToCharacterTable(fr.readSmallTextFile("test_puzzle.txt"));
+        String[][] fileArray = fr.fileLinesToCharacterTable(fr.readSmallTextFile("test_puzzle_4.txt"));
 
         Board puzzleBoard = new Board();
         puzzleBoard.setInitialBoard(fileArray);
